@@ -1,14 +1,16 @@
+//Récupération et insertion des produits dans la page index.html
+
 const url = "http://localhost:3000/api/products";
 fetch(url)
-    .then(function(getAllProducts) {
-        if(getAllProducts.ok){
+    .then(function (getAllProducts) {
+        if (getAllProducts.ok) {
             return getAllProducts.json();
         }
     })
-    .then(function(allProducts){
+    .then(function (allProducts) {
         const allProductsSection = document.getElementById("items");
-        for(i = 0; i < allProducts.length; i++) {
-            const productDisplay = `
+        for (i = 0; i < allProducts.length; i++) {
+            let productDisplay = `
             <a href="./product.html?id=${allProducts[i]._id}">
             <article>
               <img src="${allProducts[i].imageUrl}" alt="${allProducts[i].altTxt}">
@@ -21,6 +23,6 @@ fetch(url)
         }
 
     })
-    .catch(function(error){
+    .catch(function (error) {
 
     });
