@@ -2,27 +2,23 @@
 
 const url = "http://localhost:3000/api/products";
 fetch(url)
-    .then(function (getAllProducts) {
-        if (getAllProducts.ok) {
-            return getAllProducts.json();
-        }
+    .then((response) => response.json())
+    .then((getAllProducts) => {
+        allProducts(getAllProducts);
     })
-    .then(function (allProducts) {
-        const allProductsSection = document.getElementById("items");
-        for (i = 0; i < allProducts.length; i++) {
-            let productDisplay = `
-            <a href="./product.html?id=${allProducts[i]._id}">
-            <article>
-              <img src="${allProducts[i].imageUrl}" alt="${allProducts[i].altTxt}">
-              <h3 class="productName">${allProducts[i].name}</h3>
-              <p class="productDescription">${allProducts[i].description}</p>
-            </article>
-          </a>
-            `;
-            allProductsSection.innerHTML += productDisplay;
-        }
-
-    })
-    .catch(function (error) {
-
+    .catch((error) => {
+        document.querySelector(".titles").innerHTML = "<h1>Une erreur est survenue</h1>";
+        console.log(error);
     });
+function allProducts(products) {
+    let allProductsSection = document.querySelector("#items");
+    for (let displayAProduct of products) {
+        allProductsSection.innerHTML += `<a href="./product.html?_id=${displayAProduct._id}">
+            <article>
+              <img src="${displayAProduct.imageUrl}" alt="${displayAProduct.altTxt}">
+              <h3 class="productName">${displayAProduct.name}</h3>
+              <p class="productDescription">${displayAProduct.description}</p>
+            </article>
+          </a>`;
+    }
+}
