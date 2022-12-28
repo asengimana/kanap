@@ -37,7 +37,7 @@ function displayProductDetails(product) {
       productPicture.innerHTML = `<img src="${item.imageUrl}" alt="${item.altTxt}">`;
       productName.textContent = `${item.name}`;
       productPrice.textContent = `${item.price}`;
-      productDescription.textContent = `${item.productDescription}`;
+      productDescription.textContent = `${item.description}`;
       
       for (let color of item.colors) {
         
@@ -131,10 +131,14 @@ function cart() {
         alert("RAPPEL: Vous aviez déja choisit cet article.");
         
         let quantityChange = parseInt(product.quantity) + parseInt(productQuantityChoice);
+        if(quantityChange >= 1 && quantityChange <= 100) {
+          product.quantity = JSON.stringify(quantityChange);
         
-        product.quantity = JSON.stringify(quantityChange);
+          return (localStorage.cart = JSON.stringify(productsInCart));
+        } else {
+          alert("Quantité supérieure à 100 articles !");
+        }
         
-        return (localStorage.cart = JSON.stringify(productsInCart));
       }
     }
     

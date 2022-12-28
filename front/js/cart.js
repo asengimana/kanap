@@ -54,27 +54,28 @@ function cartDisplay(product) {
   let cartItems = document.querySelector("#cart__items");
 
   cartItems.innerHTML += product.map((item) =>
-    `<article class="cart__item" data-id="${item._id}" data-color="${item.color}" data-quantity="${item.quantity}" data-price="${item.price}"> 
-    <div class="cart__item__img">
-      <img src="${item.picture}" alt="${item.alt}">
-    </div>
-    <div class="cart__item__content">
-      <div class="cart__item__content__titlePrice">
-        <h2>${item.name}</h2>
-        <span>color : ${item.color}</span>
-        <p data-price="${item.price}">${item.price} €</p>
-      </div>
-      <div class="cart__item__content__settings">
-        <div class="cart__item__content__settings__quantity">
-          <p>Qté : </p>
-          <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
-        </div>
-        <div class="cart__item__content__settings__delete">
-          <p class="deleteItem" data-id="${item._id}" data-color="${item.color}">Supprimer</p>
-        </div>
-      </div>
-    </div>
-  </article>`
+    `<article class="cart__item" data-id="${item._id}" data-color="${item.color}" data-quantity="${item.quantity}" data-price="${item.price}">
+                <div class="cart__item__img">
+                  <img src="${item.picture}" alt="${item.alt}">
+                </div>
+                <div class="cart__item__content">
+                  <div class="cart__item__content__description">
+                    <h2>${item.name}</h2>
+                    <p>${item.color}</p>
+                    <p data-price="${item.price}">${item.price}</p>
+                  </div>
+                  <div class="cart__item__content__settings">
+                    <div class="cart__item__content__settings__quantity">
+                      <p>Qté : </p>
+                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
+                    </div>
+                    <div class="cart__item__content__settings__delete">
+                      <p class="deleteItem" data-id="${item._id}" data-color="${item.color}">Supprimer</p>
+                    </div>
+                  </div>
+                </div>
+              </article>`
+  
   ).join("");
   totalProducts();
 }
@@ -87,16 +88,16 @@ function changeQuantity() {
       let cart = JSON.parse(localStorage.getItem("cart"));
 
       for (item of cart)
-        if (
-          item._id === cartItem.dataset.id &&
-          cartItem.dataset.color === item.color
-        ) {
+        if (item._id === cartItem.dataset.id && cartItem.dataset.color === item.color) {
           item.quantity = quantity.target.value;
-          localStorage.cart = JSON.stringify(cart);
-
+          if(item.quantity >= 1 && item.quantity <= 100) {
+            localStorage.cart = JSON.stringify(cart);
           cartItem.dataset.quantity = quantity.target.value;
-
           totalProducts();
+          } else {
+            alert("Quantité supérieure à 100 articles !");
+          }
+          
         }
     });
   });

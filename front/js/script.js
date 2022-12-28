@@ -13,12 +13,22 @@ fetch(url)
 function allProducts(products) {
     let allProductsSection = document.querySelector("#items");
     for (let displayAProduct of products) {
-        allProductsSection.innerHTML += `<a href="./product.html?_id=${displayAProduct._id}">
-            <article>
-              <img src="${displayAProduct.imageUrl}" alt="${displayAProduct.altTxt}">
-              <h3 class="productName">${displayAProduct.name}</h3>
-              <p class="productDescription">${displayAProduct.description}</p>
-            </article>
-          </a>`;
+        const a = document.createElement('a');
+        a.setAttribute('href', `./product.html?_id=${displayAProduct._id}`);
+        const article = document.createElement('article');
+        a.appendChild(article);
+        const img = document.createElement('img');
+        img.setAttribute('src', `${displayAProduct.imageUrl}`);
+        img.setAttribute('alt', `${displayAProduct.altTxt}`);
+        article.appendChild(img);
+        const h3 = document.createElement('h3');
+        h3.className = "productName";
+        h3.textContent = displayAProduct.name;
+        article.appendChild(h3);
+        const p = document.createElement("p");
+        p.className = "productDescription";
+        p.textContent = displayAProduct.description;
+        article.appendChild(p);
+        allProductsSection.appendChild(a);
     }
 }
