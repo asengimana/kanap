@@ -6,7 +6,7 @@ const url = "http://localhost:3000/api/products";
 fetch(url)
   .then((response) => response.json())
   .then((getAllProducts) => {
-    console.log(getAllProducts);
+    //console.log(getAllProducts);
     // appel de la fonction displayProductsFromCart
     displayProductsFromCart(getAllProducts);
   })
@@ -62,7 +62,7 @@ function cartDisplay(product) {
                   <div class="cart__item__content__description">
                     <h2>${item.name}</h2>
                     <p>${item.color}</p>
-                    <p data-price="${item.price}">${item.price}</p>
+                    <p data-price="${item.price}">${item.price} €</p>
                   </div>
                   <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
@@ -89,13 +89,13 @@ function changeQuantity() {
 
       for (item of cart)
         if (item._id === cartItem.dataset.id && cartItem.dataset.color === item.color) {
-          item.quantity = quantity.target.value;
-          if(item.quantity >= 1 && item.quantity <= 100) {
+          item.quantity = Math.trunc(quantity.target.value);
+          if(item.quantity >= 1 && item.quantity <= 100 && Math.sign(item.quantity) != -1 && Math.sign(item.quantity) != 0) {
             localStorage.cart = JSON.stringify(cart);
-          cartItem.dataset.quantity = quantity.target.value;
+          cartItem.dataset.quantity = Math.trunc(quantity.target.value);
           totalProducts();
           } else {
-            alert("Quantité supérieure à 100 articles !");
+            //alert("Quantité inférieur à 1 ou supérieure à 100 !");
           }
           
         }
@@ -399,7 +399,7 @@ function submitCustomContactInfo() {
       })
       .catch(function (error) {
         console.log(error);
-        alert("erreur");
+        //alert("erreur");
       });
   }
 }

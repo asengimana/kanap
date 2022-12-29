@@ -45,7 +45,7 @@ function displayProductDetails(product) {
       }
     }
   }
-  console.log("Produit affiché avec succès!");
+  console.log("affichage du produit");
 }
 
 //Récupération de la couleur
@@ -63,7 +63,7 @@ productColor.addEventListener("input", (color) => {
 let productQuantity = document.querySelector('input[id="quantity"]');
 let productQuantityChoice;
 productQuantity.addEventListener("input", (quantity) => {
-  productQuantityChoice = quantity.target.value;
+  productQuantityChoice = Math.trunc(quantity.target.value);
   cartProduct.quantity = productQuantityChoice;
   document.querySelector("#addToCart").style.color = "white";
   document.querySelector("#addToCart").textContent = "Ajouter au panier";
@@ -74,7 +74,7 @@ productQuantity.addEventListener("input", (quantity) => {
 let addToCartButton = document.querySelector("#addToCart");
 addToCartButton.addEventListener("click", () => {
   if (cartProduct.quantity < 1 || cartProduct.quantity > 100 || cartProduct.quantity === undefined || cartProduct.color === "" || cartProduct.color === undefined) {
-    alert("Veuillez renseigner une coleur, et une quantité entre 1 et 100");
+    document.querySelector("#addToCart").textContent = "Veuillez renseigner une coleur, et une quantité entre 1 et 100";
   } else {
     cart();
     console.log("clic effectué");
@@ -128,15 +128,15 @@ function cart() {
       
       if (product._id === id && product.color === cartProduct.color) {
         
-        alert("RAPPEL: Vous aviez déja choisit cet article.");
+        //alert("RAPPEL: Vous aviez déja choisit cet article.");
         
         let quantityChange = parseInt(product.quantity) + parseInt(productQuantityChoice);
-        if(quantityChange >= 1 && quantityChange <= 100) {
+        if(quantityChange >= 1 && quantityChange <= 100 && Math.sign(quantityChange) != -1 && Math.sign(quantityChange) != 0) {
           product.quantity = JSON.stringify(quantityChange);
         
           return (localStorage.cart = JSON.stringify(productsInCart));
         } else {
-          alert("Quantité supérieure à 100 articles !");
+          //alert("Quantité inférieur à 1 ou supérieure à 100 !");
         }
         
       }
