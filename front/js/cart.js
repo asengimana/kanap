@@ -51,35 +51,75 @@ function displayProductsFromCart(product) {
 //Fonction pour afficher les produits du panier
 function cartDisplay(product) {
 
-  let cartItems = document.querySelector("#cart__items");
-
-  cartItems.innerHTML += product.map((item) =>
-    `<article class="cart__item" data-id="${item._id}" data-color="${item.color}" data-quantity="${item.quantity}" data-price="${item.price}">
-                <div class="cart__item__img">
-                  <img src="${item.picture}" alt="${item.alt}">
-                </div>
-                <div class="cart__item__content">
-                  <div class="cart__item__content__description">
-                    <h2>${item.name}</h2>
-                    <p>${item.color}</p>
-                    <p data-price="${item.price}">${item.price} €</p>
-                  </div>
-                  <div class="cart__item__content__settings">
-                    <div class="cart__item__content__settings__quantity">
-                      <p>Qté : </p>
-                      <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${item.quantity}">
-                    </div>
-                    <div class="cart__item__content__settings__delete">
-                      <p class="deleteItem" data-id="${item._id}" data-color="${item.color}">Supprimer</p>
-                    </div>
-                  </div>
-                </div>
-              </article>`
+  const cartItems = document.querySelector("#cart__items");
   
-  ).join("");
+
+  for (item of product) {
+    
+    const article = document.createElement("article");
+  const divCartItemImg = document.createElement("div");
+  const img = document.createElement("img");
+  const divCartItemContent = document.createElement("div");
+  const divCartItemContentDescription = document.createElement("div");
+  const h2 = document.createElement("h2");
+  const p = document.createElement("p");
+  const pDataPrice = document.createElement("p");
+  const divCartItemContentSettings = document.createElement("div");
+  const divCartItemContentSettingsQuantity = document.createElement("div");
+  const pQuantity = document.createElement("p");
+  const input = document.createElement("input");
+  const divCartItemContentSettingsDelete = document.createElement("div");
+  const pDeleteItem = document.createElement("p");
+
+    article.setAttribute('class', 'cart__item');
+    article.setAttribute('data-id', `${item._id}`);
+    article.setAttribute('data-color', `${item.color}`);
+    article.setAttribute('data-quantity', `${item.quantity}`);
+    article.setAttribute('data-price', `${item.price}`);
+    cartItems.appendChild(article);
+    divCartItemImg.setAttribute('class', 'cart__item__img');
+    article.appendChild(divCartItemImg);
+    img.setAttribute('src', `${item.picture}`);
+    img.setAttribute('alt', `${item.alt}`);
+    divCartItemImg.appendChild(img);
+    divCartItemContent.setAttribute('class', 'cart__item__content');
+    divCartItemContentDescription.setAttribute('class', 'cart__item__content__description');
+    h2.textContent = item.name;
+    p.textContent = item.color;
+    pDataPrice.setAttribute('data-price', `${item.price}`);
+    pDataPrice.textContent = item.price + ' €';
+    divCartItemContentDescription.appendChild(h2);
+    divCartItemContentDescription.appendChild(p);
+    divCartItemContentDescription.appendChild(pDataPrice);
+    divCartItemContent.appendChild(divCartItemContentDescription);
+    article.appendChild(divCartItemContent);
+    divCartItemContentSettings.className = 'cart__item__content__settings';
+    divCartItemContentSettingsQuantity.className = 'cart__item__content__settings__quantity';
+    pQuantity.textContent = 'Qté : ';
+    input.setAttribute('type', 'number');
+    input.className = 'itemQuantity';
+    input.setAttribute('name', 'itemQuantity');
+    input.setAttribute('min', '1');
+    input.setAttribute('max', '100');
+    input.setAttribute('value', `${item.quantity}`);
+    divCartItemContentSettingsQuantity.appendChild(pQuantity);
+    divCartItemContentSettingsQuantity.appendChild(input);
+    divCartItemContentSettings.appendChild(divCartItemContentSettingsQuantity);
+    divCartItemContent.appendChild(divCartItemContentSettings);
+    divCartItemContentSettings.appendChild(divCartItemContentSettingsDelete);
+    divCartItemContentSettingsDelete.setAttribute('class', 'cart__item__content__settings__delete');
+    pDeleteItem.setAttribute('class', 'deleteItem');
+    pDeleteItem.setAttribute('data-id', `${item._id}`);
+    pDeleteItem.setAttribute('data-color', `${item.color}`);
+    pDeleteItem.textContent = 'Supprimer';
+    divCartItemContentSettingsDelete.appendChild(pDeleteItem);
+  }
   totalProducts();
 }
-//Fonction pour modifier la quantité d'un produit du panier
+
+/**
+ * Fonction pour modifier la quantité d'un produit du panier
+ */
 function changeQuantity() {
   const cartItem = document.querySelectorAll(".cart__item");
   cartItem.forEach((cartItem) => {
@@ -90,14 +130,15 @@ function changeQuantity() {
       for (item of cart)
         if (item._id === cartItem.dataset.id && cartItem.dataset.color === item.color) {
           item.quantity = Math.trunc(quantity.target.value);
-          if(item.quantity >= 1 && item.quantity <= 100 && Math.sign(item.quantity) != -1 && Math.sign(item.quantity) != 0) {
+          if (item.quantity >= 1 && item.quantity <= 100 && Math.sign(item.quantity) != -1 && Math.sign(item.quantity) != 0) {
             localStorage.cart = JSON.stringify(cart);
-          cartItem.dataset.quantity = Math.trunc(quantity.target.value);
-          totalProducts();
+            cartItem.dataset.quantity = Math.trunc(quantity.target.value);
+            totalProducts();
           } else {
-            //alert("Quantité inférieur à 1 ou supérieure à 100 !");
+            alert("La quantité doit être comprise entre 1 et 100 !");
+            document.location.reload();
           }
-          
+
         }
     });
   });
@@ -114,7 +155,7 @@ function removeFromCart() {
           const num = [i];
           let newCart = JSON.parse(localStorage.getItem("cart"));
           newCart.splice(num, 1);
-          
+
           if (newCart && newCart.length == 0) {
             document.querySelector("#totalQuantity").innerHTML = "0";
             document.querySelector("#totalPrice").innerHTML = "0";
